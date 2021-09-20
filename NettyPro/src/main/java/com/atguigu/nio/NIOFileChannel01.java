@@ -16,13 +16,15 @@ public class NIOFileChannel01 {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream("D:\\file01.txt");
             FileChannel fileChannel = fileOutputStream.getChannel();
-
-            ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
-            byteBuffer.put(str.getBytes());
+            byte[] bytes = new byte[1024*1024*50];
+            for (int i = 0; i < bytes.length; i++) {
+                bytes[i] = 'a';
+            }
+            ByteBuffer byteBuffer = ByteBuffer.allocate(1024*1024*50);
+            byteBuffer.put(bytes);
 
             //切换为读取模式
             byteBuffer.flip();
-
 
             fileChannel.write(byteBuffer);
             fileOutputStream.close();

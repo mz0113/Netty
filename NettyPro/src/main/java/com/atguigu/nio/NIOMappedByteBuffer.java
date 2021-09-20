@@ -18,10 +18,18 @@ public class NIOMappedByteBuffer {
 
 
             // “5”是映射到内存的大小（不是索引位置，即将多少个字节映射到内存）
-            MappedByteBuffer mappedByteBuffer = channel.map(FileChannel.MapMode.READ_WRITE,0,5);
-            mappedByteBuffer.put(0, ((byte) 'H'));
-            mappedByteBuffer.put(2, ((byte) '9'));
-            mappedByteBuffer.put(4, ((byte) 'Q'));
+            MappedByteBuffer mappedByteBuffer = channel.map(FileChannel.MapMode.READ_WRITE,0, 1024*10);
+            //1KB = 1024byte,1M = 1024KB,100M
+            byte[] bytes = new byte[1024*1];
+            for (int i = 0; i < bytes.length; i++) {
+                bytes[i] = 'a';
+            }
+            mappedByteBuffer.put(bytes,0,bytes.length);
+            for (int i = 0; i < bytes.length; i++) {
+                bytes[i] = 'b';
+            }
+            mappedByteBuffer = channel.map(FileChannel.MapMode.READ_WRITE,1024*10*5, 1024*10);
+            mappedByteBuffer.put(bytes,0,bytes.length);
 
             randomAccessFile.close();
             System.out.println("success");
